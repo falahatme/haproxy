@@ -70,10 +70,10 @@ frontend http_frontend
 backend http_servers
         mode http
         balance roundrobin
-        option httpchk HEAD /
-        http-response set-header X-Frame-Options SAMEORIGIN
-        http-response set-header X-XSS-Protection 1;mode=block
-        http-response set-header X-Content-Type-Options nosniff
+        #option httpchk HEAD /
+        #http-response set-header X-Frame-Options SAMEORIGIN
+        #http-response set-header X-XSS-Protection 1;mode=block
+        #http-response set-header X-Content-Type-Options nosniff
         default-server check maxconn 5000
         server http_server1 192.168.15.133:80
         server http_server2 192.168.15.134:80
