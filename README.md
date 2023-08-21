@@ -63,7 +63,7 @@ backend be-apiserver
 frontend http_frontend
         mode http
         bind *:80
-        bind *:443 ssl crt /etc/ssl/certs/buluttakin.pem alpn h2,http/1.1  ssl-min-ver TLSv1.2
+        bind *:443 ssl crt /etc/ssl/certs/myfullcert.pem alpn h2,http/1.1  ssl-min-ver TLSv1.2
         redirect scheme https code 301 if !{ ssl_fc }
         default_backend   http_servers
 
