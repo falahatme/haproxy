@@ -63,24 +63,26 @@ backend be-apiserver
 frontend http_frontend
         mode http
         bind *:80
-        bind *:443 ssl crt /etc/ssl/certs/mysite.pem alpn h2,http/1.1  ssl-min-ver TLSv1.2
+        bind *:443 ssl crt /etc/ssl/certs/buluttakin.pem alpn h2,http/1.1  ssl-min-ver TLSv1.2
         redirect scheme https code 301 if !{ ssl_fc }
         default_backend   http_servers
 
 backend http_servers
         mode http
         balance roundrobin
-        #option httpchk HEAD /
-        #http-response set-header X-Frame-Options SAMEORIGIN
-        #http-response set-header X-XSS-Protection 1;mode=block
-        #http-response set-header X-Content-Type-Options nosniff
+        option forwardfor
+        http-request set-header X-Forwarded-Port %[dst_port]
+        http-request add-header X-Forwarded-Proto https if { ssl_fc }
         default-server check maxconn 5000
-        server http_server1 192.168.15.133:80
-        server http_server2 192.168.15.134:80
-        server http_server3 192.168.15.135:80
+        server master1 192.168.62.202:31332  check  ssl verify none#31950
+        server master2 192.168.62.200:31332  check  ssl verify none#31950
+        server master3 192.168.62.199:31332  check  ssl verify none#31950
+        server worker1 192.168.62.48:31332   check  ssl verify none#31950
+        server worker2 192.168.62.240:31332  check  ssl verify none#31950
+        server worker3 192.168.62.195:31332  check  ssl verify none#31950
 ```
 
 ## mysite.pem is :
 
 cat mysite.key mysite.crt mysite.ca-bundle > mysite.pem
-
+be careful to change ingress service external mode to Cluster.
