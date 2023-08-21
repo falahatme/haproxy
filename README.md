@@ -74,6 +74,7 @@ backend http_servers
         http-request set-header X-Forwarded-Port %[dst_port]
         http-request add-header X-Forwarded-Proto https if { ssl_fc }
         default-server check maxconn 5000
+        # be careful to change ingress service external mode to Cluster.
         server master1 192.168.62.202:31332  check  ssl verify none#31950
         server master2 192.168.62.200:31332  check  ssl verify none#31950
         server master3 192.168.62.199:31332  check  ssl verify none#31950
@@ -85,4 +86,3 @@ backend http_servers
 ## mysite.pem is :
 
 cat mysite.key mysite.crt mysite.ca-bundle > mysite.pem
-be careful to change ingress service external mode to Cluster.
